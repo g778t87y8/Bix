@@ -15,6 +15,7 @@ import {
   BookmarkIcon as BookmarkIconSolid
 } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
+import { useToast } from '@/components/layout/ToastManager';
 
 type VideoCardProps = {
   video: {
@@ -59,6 +60,7 @@ export default function VideoCard({
   const [isInView, setIsInView] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoContainerRef = useRef<HTMLDivElement>(null);
+  const { showToast } = useToast();
 
   // Handle intersection observer for autoplay when in view
   useEffect(() => {
@@ -97,12 +99,35 @@ export default function VideoCard({
 
   const toggleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsLiked(!isLiked);
+    const newLikedState = !isLiked;
+    setIsLiked(newLikedState);
+    
+    // إظهار إشعار عند الإعجاب
+    if (newLikedState) {
+      showToast({
+        type: 'success',
+        title: 'تم الإعجاب',
+        message: `تم إضافة الفيديو إلى قائمة إعجاباتك`,
+        duration: 3000,
+        link: `/video/${id}`
+      });
+    }
   };
   
   const toggleSave = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsSaved(!isSaved);
+    const newSavedState = !isSaved;
+    setIsSaved(newSavedState);
+    
+    // إظهار إشعار عند الحفظ
+    if (newSavedState) {
+      showToast({
+        type: 'info',
+        title: 'تم الحفظ',
+        message: `تم حفظ الفيديو في مجموعتك`,
+        duration: 3000
+      });
+    }
   };
 
   const togglePlayPause = () => {

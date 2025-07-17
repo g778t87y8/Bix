@@ -33,6 +33,17 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const [isGuest, setIsGuest] = useState(false);
 
   useEffect(() => {
+    // وضع علامة لتتبع ما إذا كان المكون لا يزال مثبتًا
+    let isMounted = true;
+    
+    // تعيين مهلة زمنية لإنهاء حالة التحميل بعد 3 ثوانٍ كحد أقصى
+    const timeoutId = setTimeout(() => {
+      if (isMounted && loading) {
+        console.log("Auth timeout reached, creating guest user");
+        createMockGuestUser();
+      }
+    }, 3000);
+    
     // Function to safely access localStorage (only in browser)
     const safeLocalStorage = {
       getItem: (key: string) => {
@@ -67,9 +78,11 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         console.log("Found mock guest user in localStorage");
         try {
           const parsedUser = JSON.parse(mockGuestUser);
-          setUser(parsedUser);
-          setIsGuest(true);
-          setLoading(false);
+          if (isMounted) {
+            setUser(parsedUser);
+            setIsGuest(true);
+            setLoading(false);
+          }
           return true;
         } catch (e) {
           console.error('Error parsing guest user:', e);
@@ -83,7 +96,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
       const guestUser = {
         uid: `guest-${Date.now()}`,
         isAnonymous: true,
-        displayName: "Guest User",
+        displayName: "مستخدم ضيف",
         photoURL: "https://randomuser.me/api/portraits/lego/1.jpg"
       };
       
@@ -94,9 +107,11 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         console.log("Created guest user in memory only (localStorage failed)");
       }
       
-      setUser(guestUser);
-      setIsGuest(true);
-      setLoading(false);
+      if (isMounted) {
+        setUser(guestUser);
+        setIsGuest(true);
+        setLoading(false);
+      }
       return true;
     };
 
@@ -106,21 +121,38 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     // If no mock guest user, listen for Firebase auth changes
     let unsubscribe: () => void = () => {};
     if (!hasMockUser) {
-      unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-        if (firebaseUser) {
-          console.log("Firebase auth user:", firebaseUser.uid, "isAnonymous:", firebaseUser.isAnonymous);
-          setUser(firebaseUser);
-          setIsGuest(firebaseUser.isAnonymous);
-          setLoading(false);
-        } else {
-          // No Firebase user, create a mock guest user automatically
+      try {
+        unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+          if (!isMounted) return;
+          
+          if (firebaseUser) {
+            console.log("Firebase auth user:", firebaseUser.uid, "isAnonymous:", firebaseUser.isAnonymous);
+            setUser(firebaseUser);
+            setIsGuest(firebaseUser.isAnonymous);
+            setLoading(false);
+          } else {
+            // No Firebase user, create a mock guest user automatically
+            createMockGuestUser();
+          }
+        }, (error) => {
+          console.error("Firebase auth error:", error);
+          if (isMounted) {
+            // في حالة حدوث خطأ في المصادقة، قم بإنشاء مستخدم ضيف
+            createMockGuestUser();
+          }
+        });
+      } catch (error) {
+        console.error("Error setting up auth state listener:", error);
+        if (isMounted) {
           createMockGuestUser();
         }
-      });
+      }
     }
 
     // Clean up function
     return () => {
+      isMounted = false;
+      clearTimeout(timeoutId);
       unsubscribe();
     };
   }, []);

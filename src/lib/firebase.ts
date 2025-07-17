@@ -3,16 +3,17 @@ import { initializeApp } from "firebase/app";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
+import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
-// For demo purposes, we're using a minimal configuration that works without an actual Firebase project
 const firebaseConfig = {
-  apiKey: "demo-api-key",
-  authDomain: "demo-app.firebaseapp.com",
-  projectId: "demo-app",
-  storageBucket: "demo-app.appspot.com",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef1234567890"
+  apiKey: "AIzaSyAuFnFMy_J_wXbv9YrusLEWEogjj1jGk",
+  authDomain: "bixing-1b152.firebaseapp.com",
+  projectId: "bixing-1b152",
+  storageBucket: "bixing-1b152.firebasestorage.app",
+  messagingSenderId: "1254701904426",
+  appId: "1:1254701904426:web:b744bb191adbB6efc973",
+  measurementId: "G-08BZEY1F5M"
 };
 
 // Initialize Firebase
@@ -21,23 +22,23 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-// In a real production app, you would use your actual Firebase project credentials
-// and remove these emulator connections
+// Initialize Analytics if available
+export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 
-// For demo purposes, we'll use in-memory emulation
-// This allows authentication to work without a real Firebase project
-if (typeof window !== 'undefined') {
-  // Only connect to emulators in browser environment
+// We're now using real Firebase credentials
+// If you want to use emulators for local development, uncomment the code below
+
+/*
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  // Only connect to emulators in browser environment and in development mode
   try {
-    // Use in-memory auth emulation
     connectAuthEmulator(auth, "http://localhost:9099", { disableWarnings: true });
+    connectFirestoreEmulator(db, 'localhost', 8080);
+    connectStorageEmulator(storage, 'localhost', 9199);
     
-    // These would be used if you were running actual Firebase emulators
-    // connectFirestoreEmulator(db, 'localhost', 8080);
-    // connectStorageEmulator(storage, 'localhost', 9199);
-    
-    console.log("Connected to Firebase auth emulator");
+    console.log("Connected to Firebase emulators");
   } catch (error) {
     console.error("Failed to connect to Firebase emulators:", error);
   }
 }
+*/

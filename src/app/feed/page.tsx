@@ -3,13 +3,16 @@
 import { useEffect, useState, useRef } from 'react';
 import VideoCard from '@/components/video/VideoCard';
 import BottomNav from '@/components/layout/BottomNav';
+import TopNav from '@/components/layout/TopNav';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { mockVideos } from '@/lib/mockData';
+import { useToast } from '@/components/layout/ToastManager';
 
 export default function FeedPage() {
   const { user, loading, isGuest } = useAuth();
   const router = useRouter();
+  const { showToast } = useToast();
   const [videos, setVideos] = useState(mockVideos);
   const [checkingAuth, setCheckingAuth] = useState(true);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
@@ -28,8 +31,24 @@ export default function FeedPage() {
     if (!loading) {
       setCheckingAuth(false);
       setShouldRender(true);
+      
+      // إظهار إشعار ترحيبي
+      if (user) {
+        setTimeout(() => {
+          showToast({
+            type: 'notification',
+            title: 'مرحبًا بك في Bix!',
+            message: 'استمتع بمشاهدة أحدث الفيديوهات الرائجة',
+            duration: 5000,
+            user: isGuest ? undefined : {
+              username: user.displayName || 'مستخدم Bix',
+              avatar: user.photoURL || 'https://randomuser.me/api/portraits/lego/1.jpg'
+            }
+          });
+        }, 1000);
+      }
     }
-  }, [user, loading, isGuest]);
+  }, [user, loading, isGuest, showToast]);
 
   // Scroll to current video when index changes
   useEffect(() => {
@@ -79,9 +98,14 @@ export default function FeedPage() {
   
   return (
     <div className="h-screen bg-black">
+      {/* شريط التنقل العلوي */}
+      <div className="pt-14"> {/* إضافة مساحة للشريط العلوي */}
+        <TopNav />
+      </div>
+      
       {isGuest && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-yellow-500 p-2 text-center text-black text-sm">
-          You are browsing as a guest. Some features may be limited.
+        <div className="fixed top-14 left-0 right-0 z-40 bg-yellow-500 p-2 text-center text-black text-sm">
+          أنت تتصفح كضيف. بعض الميزات قد تكون محدودة.
         </div>
       )}
       
