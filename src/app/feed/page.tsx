@@ -8,6 +8,8 @@ import { useAuth } from '@/components/auth/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { mockVideos } from '@/lib/mockData';
 import { useToast } from '@/components/layout/ToastManager';
+import OfflineAlert from '@/components/common/OfflineAlert';
+import { registerServiceWorker } from '@/app/register-sw';
 
 export default function FeedPage() {
   const { user, loading, isGuest } = useAuth();
@@ -27,19 +29,22 @@ export default function FeedPage() {
       isGuest
     });
 
+    // تسجيل Service Worker
+    registerServiceWorker();
+
     // We'll always have a user now (either real or guest)
     if (!loading) {
       setCheckingAuth(false);
       setShouldRender(true);
       
-      // إظهار إشعار ترحيبي
+      // إظهار إشعار ترحيبي - تقليل مدة الإشعار لتحسين تجربة المستخدم
       if (user) {
         setTimeout(() => {
           showToast({
             type: 'notification',
             title: 'مرحبًا بك في Bix!',
             message: 'استمتع بمشاهدة أحدث الفيديوهات الرائجة',
-            duration: 5000,
+            duration: 3000, // تقليل المدة من 5000 إلى 3000
             user: isGuest ? undefined : {
               username: user.displayName || 'مستخدم Bix',
               avatar: user.photoURL || 'https://randomuser.me/api/portraits/lego/1.jpg'
@@ -97,14 +102,14 @@ export default function FeedPage() {
   console.log("Rendering feed for user:", user?.uid || "guest user");
   
   return (
-    <div className="h-screen bg-black">
+    <div className="h-screen bg-black dark:bg-gray-950 transition-colors duration-300">
       {/* شريط التنقل العلوي */}
       <div className="pt-14"> {/* إضافة مساحة للشريط العلوي */}
         <TopNav />
       </div>
       
       {isGuest && (
-        <div className="fixed top-14 left-0 right-0 z-40 bg-yellow-500 p-2 text-center text-black text-sm">
+        <div className="fixed top-14 left-0 right-0 z-40 bg-yellow-500 dark:bg-yellow-600 p-2 text-center text-black dark:text-white text-sm transition-colors duration-300">
           أنت تتصفح كضيف. بعض الميزات قد تكون محدودة.
         </div>
       )}
@@ -125,6 +130,9 @@ export default function FeedPage() {
           </div>
         ))}
       </div>
+      
+      {/* Offline Alert */}
+      <OfflineAlert />
       
       {/* Bottom Navigation */}
       <BottomNav />

@@ -57,15 +57,27 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const createToastContainer = () => {
     const container = document.createElement('div');
     container.id = 'toast-container';
-    container.className = 'fixed top-4 right-4 z-50 flex flex-col space-y-2 items-end';
+    // تحسين موضع الإشعارات وزيادة z-index لضمان ظهورها فوق جميع العناصر الأخرى
+    container.className = 'fixed top-4 right-4 z-[9999] flex flex-col space-y-2 items-end';
     document.body.appendChild(container);
     return container;
   };
 
   // إظهار إشعار جديد
   const showToast = (toast: Omit<Toast, 'id'>) => {
+    // تحديد الحد الأقصى لعدد الإشعارات المعروضة في وقت واحد (3)
+    const maxToasts = 3;
+    
+    // إذا كان هناك بالفعل الحد الأقصى من الإشعارات، قم بإزالة الأقدم
+    if (toasts.length >= maxToasts) {
+      const oldestToastId = toasts[0].id;
+      hideToast(oldestToastId);
+    }
+    
     const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const newToast = { ...toast, id };
+    
+    // إضافة الإشعار الجديد
     setToasts(prev => [...prev, newToast]);
     return id;
   };

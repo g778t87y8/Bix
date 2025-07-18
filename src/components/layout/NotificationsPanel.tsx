@@ -242,13 +242,21 @@ export default function NotificationsPanel() {
                             {notification.user ? (
                               <div className="flex-shrink-0 mr-3 rtl:ml-3 rtl:mr-0">
                                 <Link href={`/profile/${notification.user.username}`}>
-                                  <Image
-                                    src={notification.user.avatar}
-                                    alt={notification.user.username}
-                                    width={40}
-                                    height={40}
-                                    className="rounded-full"
-                                  />
+                                  <div className="relative w-10 h-10">
+                                    <Image
+                                      src={notification.user.avatar}
+                                      alt={notification.user.username}
+                                      width={40}
+                                      height={40}
+                                      className="rounded-full object-cover"
+                                      onError={(e) => {
+                                        // في حالة فشل تحميل الصورة، استخدم صورة افتراضية
+                                        const target = e.target as HTMLImageElement;
+                                        target.onerror = null; // منع التكرار اللانهائي
+                                        target.src = "https://randomuser.me/api/portraits/lego/1.jpg";
+                                      }}
+                                    />
+                                  </div>
                                 </Link>
                               </div>
                             ) : (

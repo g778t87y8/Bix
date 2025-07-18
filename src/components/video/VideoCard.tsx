@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, memo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
@@ -16,6 +16,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
 import { useToast } from '@/components/layout/ToastManager';
+import { throttle } from '@/lib/utils/performance';
 
 type VideoCardProps = {
   video: {
@@ -35,7 +36,7 @@ type VideoCardProps = {
   onVideoEnd?: () => void;
 };
 
-export default function VideoCard({
+function VideoCard({
   video,
   isCompact = false,
   autoPlay = false,
@@ -87,9 +88,26 @@ export default function VideoCard({
   useEffect(() => {
     if (videoRef.current) {
       if (isInView) {
-        videoRef.current.play()
-          .then(() => setIsPlaying(true))
-          .catch((error) => console.error("Error playing video:", error));
+        // إضافة تأخير صغير قبل محاولة التشغيل لضمان تحميل الفيديو
+        const playTimer = setTimeout(() => {
+          if (videoRef.current) {
+            videoRef.current.play()
+              .then(() => setIsPlaying(true))
+              .catch((error) => {
+                console.error("Error playing video:", error);
+                // محاولة إعادة التشغيل مرة أخرى بعد تأخير
+                setTimeout(() => {
+                  if (videoRef.current) {
+                    videoRef.current.play()
+                      .then(() => setIsPlaying(true))
+                      .catch(e => console.error("Second attempt failed:", e));
+                  }
+                }, 1000);
+              });
+          }
+        }, 300);
+        
+        return () => clearTimeout(playTimer);
       } else {
         videoRef.current.pause();
         setIsPlaying(false);
@@ -330,3 +348,6 @@ export default function VideoCard({
     </div>
   );
 }
+
+// تصدير المكون مع تحسين الأداء باستخدام memo
+export default memo(VideoCard);

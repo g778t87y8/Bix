@@ -103,30 +103,41 @@ export default function AuthForm() {
       
       // Skip Firebase completely for guest login and use direct localStorage approach
       // This is more reliable for demo purposes
-      const guestUserId = 'guest-' + Math.random().toString(36).substring(2, 9);
+      const timestamp = Date.now();
+      const randomId = Math.random().toString(36).substring(2, 9);
+      const guestUserId = `guest-${timestamp}-${randomId}`;
       
       // Create a mock user in localStorage to simulate guest login
       const mockUser = {
         uid: guestUserId,
         isAnonymous: true,
-        displayName: 'Guest User',
+        displayName: 'مستخدم ضيف',
         email: null,
-        photoURL: null
+        photoURL: "https://randomuser.me/api/portraits/lego/1.jpg"
       };
       
       // Store the mock user in localStorage
-      localStorage.setItem('bix-guest-user', JSON.stringify(mockUser));
-      console.log("Created mock guest user:", mockUser);
-      
-      // Add a small delay to ensure localStorage is updated
-      setTimeout(() => {
-        // Force a page reload to let AuthProvider pick up the mock user
-        window.location.href = '/feed';
-      }, 100);
+      try {
+        localStorage.setItem('bix-guest-user', JSON.stringify(mockUser));
+        console.log("Created mock guest user:", mockUser);
+        
+        // Add a small delay to ensure localStorage is updated
+        setTimeout(() => {
+          // Force a page reload to let AuthProvider pick up the mock user
+          window.location.href = '/feed';
+        }, 300);
+      } catch (storageError) {
+        console.error("Error storing guest user in localStorage:", storageError);
+        // إذا فشل التخزين في localStorage، ننتقل مباشرة إلى صفحة التغذية
+        // سيقوم AuthProvider بإنشاء مستخدم ضيف افتراضي
+        setTimeout(() => {
+          window.location.href = '/feed';
+        }, 300);
+      }
       
     } catch (err: any) {
       console.error("Error in guest sign in:", err);
-      setError("Failed to sign in as guest. Please try again.");
+      setError("فشل تسجيل الدخول كضيف. يرجى المحاولة مرة أخرى.");
       setIsGuestLoading(false);
     }
   };

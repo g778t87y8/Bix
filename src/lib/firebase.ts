@@ -7,12 +7,12 @@ import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAuFnFMy_J_wXbv9YrusLEWEogjj1jGk",
+  apiKey: "AIzaSyAuFnFMy_J_wXbv9YrusLEWEogjj1jGkAA",
   authDomain: "bixing-1b152.firebaseapp.com",
   projectId: "bixing-1b152",
-  storageBucket: "bixing-1b152.firebasestorage.app",
+  storageBucket: "bixing-1b152.appspot.com",
   messagingSenderId: "1254701904426",
-  appId: "1:1254701904426:web:b744bb191adbB6efc973",
+  appId: "1:1254701904426:web:b744bb191adbB6efc973a1",
   measurementId: "G-08BZEY1F5M"
 };
 

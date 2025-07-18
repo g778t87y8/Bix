@@ -9,6 +9,7 @@ import { useToast } from '@/components/layout/ToastManager';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { storage, db } from '@/lib/firebase';
+import { validateCaption } from '@/lib/utils/contentFilter';
 import { 
   ArrowLeftIcon, 
   HashtagIcon, 
@@ -282,6 +283,19 @@ export default function UploadPage() {
       });
       return;
     }
+    
+    // التحقق من المحتوى غير اللائق في الوصف
+    const captionValidation = validateCaption(caption);
+    if (!captionValidation.isValid) {
+      setError(captionValidation.message || 'الوصف يحتوي على محتوى غير لائق');
+      showToast({
+        type: 'error',
+        title: 'محتوى غير لائق',
+        message: captionValidation.message || 'يرجى تجنب استخدام لغة غير لائقة في الوصف',
+        duration: 3000
+      });
+      return;
+    }
 
     setIsUploading(true);
     setError('');
@@ -360,7 +374,7 @@ export default function UploadPage() {
             userId: user.uid,
             username: user.displayName || user.email?.split('@')[0] || 'مستخدم مجهول',
             userImage: user.photoURL || 'https://randomuser.me/api/portraits/lego/1.jpg',
-            caption,
+            caption: captionValidation.cleanedCaption,
             [fileType === 'video' ? 'videoUrl' : 'imageUrl']: contentUrl,
             thumbnailUrl: fileType === 'video' ? thumbnailUrl : '',
             audioTitle: fileType === 'video' ? sound : '',

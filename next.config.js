@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false, // تعطيل الوضع الصارم لتحسين الأداء
   images: {
-    domains: ['randomuser.me', 'firebasestorage.googleapis.com'],
+    domains: ['randomuser.me', 'firebasestorage.googleapis.com', 'lh3.googleusercontent.com'],
+    unoptimized: true,
+    minimumCacheTTL: 60, // تخزين مؤقت للصور لمدة 60 ثانية
   },
+  output: 'standalone',
+  poweredByHeader: false, // إزالة رأس X-Powered-By لتحسين الأمان
   async headers() {
     return [
       {
@@ -37,6 +41,33 @@ const nextConfig = {
         },
       },
     });
+    
+    // تحسين الأداء عن طريق تقليل حجم الحزم
+    config.optimization = {
+      ...config.optimization,
+      runtimeChunk: 'single',
+      splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: Infinity,
+        minSize: 0,
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name(module) {
+              // احصل على اسم الحزمة من المسار
+              if (module.context) {
+                const match = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/);
+                if (match && match[1]) {
+                  // تجنب استخدام @ و / في اسم الملف
+                  return `npm.${match[1].replace('@', '')}`;
+                }
+              }
+              return 'vendor';
+            },
+          },
+        },
+      },
+    };
 
     return config;
   },

@@ -4,7 +4,7 @@ const next = require('next');
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = '0.0.0.0';
-const port = 12000;
+const port = process.env.PORT || 12000; // استخدام المنفذ من متغيرات البيئة أو 12000 كقيمة افتراضية
 
 // Create the Next.js app
 const app = next({ dev, hostname, port });
@@ -33,6 +33,7 @@ app.prepare().then(() => {
   }).listen(port, hostname, (err) => {
     if (err) throw err;
     console.log(`> Ready on http://${hostname}:${port}`);
-    console.log(`> Access via: https://work-1-nqmayjtcounlecny.prod-runtime.all-hands.dev`);
+    console.log(`> Access via: https://work-1-ryuuqjomxbqjnxrs.prod-runtime.all-hands.dev`);
+    console.log(`> Alternative access: https://work-2-ryuuqjomxbqjnxrs.prod-runtime.all-hands.dev`);
   });
 });

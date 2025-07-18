@@ -1,0 +1,47 @@
+> Ready on http://0.0.0.0:12001
+> Access via: https://work-1-ryuuqjomxbqjnxrs.prod-runtime.all-hands.dev
+> Alternative access: https://work-2-ryuuqjomxbqjnxrs.prod-runtime.all-hands.dev
+ ○ Compiling / ...
+ ✓ Compiled / in 9.3s (1775 modules)
+ GET / 200 in 10899ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 887ms (1761 modules)
+ GET / 404 in 1135ms
+ ✓ Compiled in 239ms (769 modules)
+ ✓ Compiled in 226ms (769 modules)
+ ✓ Compiled in 194ms (769 modules)
+ ✓ Compiled in 231ms (769 modules)
+ ✓ Compiled in 992ms (1764 modules)
+ GET / 200 in 74ms
+ ✓ Compiled in 406ms (1764 modules)
+ ✓ Compiled in 1613ms (767 modules)
+ ✓ Compiled in 221ms (767 modules)
+ ✓ Compiled in 257ms (767 modules)
+ ✓ Compiled in 260ms (767 modules)
+ ✓ Compiled in 568ms (753 modules)
+ ✓ Compiled in 176ms (767 modules)
+ ✓ Compiled in 150ms (767 modules)
+ ✓ Compiled in 165ms (767 modules)
+ ✓ Compiled in 220ms (767 modules)
+ ✓ Compiled in 217ms (767 modules)
+ ✓ Compiled in 200ms (767 modules)
+ ✓ Compiled in 222ms (767 modules)
+ ✓ Compiled in 233ms (767 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 600ms (993 modules)
+ GET / 200 in 981ms
+ ⚠ Cross origin request detected from work-2-ryuuqjomxbqjnxrs.prod-runtime.all-hands.dev to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ ✓ Compiled /feed in 329ms (1009 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 926ms (1855 modules)
+ GET /favicon.ico 200 in 1604ms
+ GET /feed 200 in 1616ms
+ GET /icons/icon-192.png 404 in 919ms
+ GET /feed 200 in 11ms
+ GET / 200 in 49ms
+ GET / 200 in 40ms
+ GET / 200 in 35ms
+ GET / 200 in 33ms
+ GET / 200 in 36ms
+ GET / 200 in 34ms

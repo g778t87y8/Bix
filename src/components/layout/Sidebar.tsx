@@ -14,43 +14,73 @@ export default function Sidebar() {
 
   const handleSignOut = async () => {
     try {
-      // Check if we have a mock guest user in localStorage
+      // التحقق من وجود مستخدم ضيف في localStorage
       const mockGuestUser = localStorage.getItem('bix-guest-user');
       if (mockGuestUser) {
-        // Remove the mock guest user from localStorage
+        // إزالة المستخدم الضيف من localStorage
         localStorage.removeItem('bix-guest-user');
-        console.log("Removed mock guest user from localStorage");
+        console.log("تم إزالة المستخدم الضيف من localStorage");
         
-        // Redirect to auth page
+        // إعادة توجيه إلى صفحة المصادقة
         window.location.href = '/auth';
         return;
       }
       
-      // Otherwise, sign out from Firebase
-      await signOut(auth);
+      // تسجيل الخروج من Firebase
+      try {
+        await signOut(auth);
+        console.log("تم تسجيل الخروج من Firebase بنجاح");
+        
+        // إعادة توجيه إلى صفحة المصادقة بعد تأخير قصير
+        setTimeout(() => {
+          window.location.href = '/auth';
+        }, 300);
+      } catch (firebaseError) {
+        console.error('خطأ أثناء تسجيل الخروج من Firebase:', firebaseError);
+        // في حالة حدوث خطأ، نقوم بإعادة التوجيه على أي حال
+        window.location.href = '/auth';
+      }
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('خطأ عام أثناء تسجيل الخروج:', error);
+      // في حالة حدوث خطأ، نقوم بإعادة التوجيه على أي حال
+      window.location.href = '/auth';
     }
   };
 
   const navItems = [
-    { name: 'For You', href: '/feed', icon: HomeIcon },
-    { name: 'Upload', href: '/upload', icon: PlusCircleIcon },
-    { name: 'Profile', href: '/profile', icon: UserIcon },
+    { name: 'الرئيسية', href: '/feed', icon: HomeIcon },
+    { name: 'رفع فيديو', href: '/upload', icon: PlusCircleIcon },
+    { name: 'الملف الشخصي', href: '/profile', icon: UserIcon },
   ];
 
   // Determine if user is a guest - safely check localStorage only in browser
   const [isGuest, setIsGuest] = useState(user?.isAnonymous || false);
-  const [displayName, setDisplayName] = useState(user?.displayName || 'User');
+  const [displayName, setDisplayName] = useState(user?.displayName || 'مستخدم');
   
   // Check localStorage for guest user (client-side only)
   useEffect(() => {
-    try {
-      const isGuestFromStorage = localStorage.getItem('bix-guest-user') !== null;
-      setIsGuest(user?.isAnonymous || isGuestFromStorage);
-      setDisplayName(user?.displayName || (isGuestFromStorage ? 'Guest User' : 'User'));
-    } catch (e) {
-      console.error("Error accessing localStorage:", e);
+    if (typeof window !== 'undefined') {
+      try {
+        const isGuestFromStorage = localStorage.getItem('bix-guest-user') !== null;
+        setIsGuest(user?.isAnonymous || isGuestFromStorage);
+        
+        // تحديد اسم العرض بناءً على بيانات المستخدم
+        if (user?.displayName) {
+          setDisplayName(user.displayName);
+        } else if (isGuestFromStorage) {
+          try {
+            const guestData = JSON.parse(localStorage.getItem('bix-guest-user') || '{}');
+            setDisplayName(guestData.displayName || 'مستخدم ضيف');
+          } catch {
+            setDisplayName('مستخدم ضيف');
+          }
+        } else {
+          setDisplayName('مستخدم');
+        }
+      } catch (e) {
+        console.error("Error accessing localStorage:", e);
+        setDisplayName('مستخدم');
+      }
     }
   }, [user]);
 
@@ -115,8 +145,8 @@ export default function Sidebar() {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              <span className="hidden md:inline">Sign Out</span>
-              <span className="md:hidden">Exit</span>
+              <span className="hidden md:inline">تسجيل الخروج</span>
+              <span className="md:hidden">خروج</span>
             </button>
           </div>
         )}

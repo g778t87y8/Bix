@@ -93,26 +93,46 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
     // Function to create a mock guest user
     const createMockGuestUser = () => {
-      const guestUser = {
-        uid: `guest-${Date.now()}`,
-        isAnonymous: true,
-        displayName: "مستخدم ضيف",
-        photoURL: "https://randomuser.me/api/portraits/lego/1.jpg"
-      };
-      
-      const success = safeLocalStorage.setItem('bix-guest-user', JSON.stringify(guestUser));
-      if (success) {
-        console.log("Created new mock guest user:", guestUser.uid);
-      } else {
-        console.log("Created guest user in memory only (localStorage failed)");
+      try {
+        const randomId = Math.random().toString(36).substring(2, 9);
+        const guestUser = {
+          uid: `guest-${Date.now()}-${randomId}`,
+          isAnonymous: true,
+          displayName: "مستخدم ضيف",
+          photoURL: "https://randomuser.me/api/portraits/lego/1.jpg",
+          email: null
+        };
+        
+        const success = safeLocalStorage.setItem('bix-guest-user', JSON.stringify(guestUser));
+        if (success) {
+          console.log("Created new mock guest user:", guestUser.uid);
+        } else {
+          console.log("Created guest user in memory only (localStorage failed)");
+        }
+        
+        if (isMounted) {
+          setUser(guestUser);
+          setIsGuest(true);
+          setLoading(false);
+        }
+        return true;
+      } catch (error) {
+        console.error("Error creating guest user:", error);
+        // إنشاء مستخدم ضيف بسيط في حالة حدوث خطأ
+        if (isMounted) {
+          const fallbackUser = { 
+            uid: `guest-fallback`, 
+            isAnonymous: true, 
+            displayName: "ضيف",
+            photoURL: null,
+            email: null
+          };
+          setUser(fallbackUser);
+          setIsGuest(true);
+          setLoading(false);
+        }
+        return true;
       }
-      
-      if (isMounted) {
-        setUser(guestUser);
-        setIsGuest(true);
-        setLoading(false);
-      }
-      return true;
     };
 
     // Initial check for mock guest user

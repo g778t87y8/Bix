@@ -40,6 +40,9 @@ export default function ToastNotification({
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
+    // تأكد من أن المدة أكبر من صفر لتجنب الإشعارات الدائمة
+    if (duration <= 0) return;
+    
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(() => onClose(id), 300); // إزالة بعد انتهاء الحركة
@@ -123,9 +126,11 @@ export default function ToastNotification({
     }
   };
 
+  // تحسين وظيفة إغلاق الإشعار
   const handleClose = () => {
     setIsVisible(false);
-    setTimeout(() => onClose(id), 300);
+    // إزالة الإشعار فورًا عند النقر على زر الإغلاق
+    onClose(id);
   };
 
   const toastContent = (
@@ -149,7 +154,10 @@ export default function ToastNotification({
             {action && (
               <div className="mt-2">
                 <button
-                  onClick={action.onClick}
+                  onClick={(e) => {
+                    e.stopPropagation(); // منع انتشار الحدث
+                    action.onClick();
+                  }}
                   className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   {action.text}
@@ -160,8 +168,12 @@ export default function ToastNotification({
           
           <div className="ml-4 flex-shrink-0 flex">
             <button
-              onClick={handleClose}
+              onClick={(e) => {
+                e.stopPropagation(); // منع انتشار الحدث
+                handleClose();
+              }}
               className="bg-transparent rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none"
+              aria-label="إغلاق الإشعار"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
@@ -180,7 +192,7 @@ export default function ToastNotification({
         />
       </div>
       
-      <style jsx>{`
+      <style jsx global>{`
         @keyframes shrink {
           from { width: 100%; }
           to { width: 0%; }
@@ -197,7 +209,12 @@ export default function ToastNotification({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="z-50"
+          className="z-[9999]"
+          onClick={(e) => {
+            // منع انتشار الحدث إذا تم النقر على الإشعار نفسه
+            // هذا يمنع تفاعل العناصر خلف الإشعار
+            e.stopPropagation();
+          }}
         >
           {link ? (
             <Link href={link} className="block">

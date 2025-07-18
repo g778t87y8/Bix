@@ -82,7 +82,7 @@ export default function InboxPage() {
     <div className="pb-20 pt-2 min-h-screen bg-white">
       {/* Header */}
       <div className="sticky top-0 z-10 bg-white border-b border-gray-200 p-4">
-        <h1 className="text-xl font-bold text-center">Inbox</h1>
+        <h1 className="text-xl font-bold text-center">الرسائل والإشعارات</h1>
       </div>
 
       <div className="border-b border-gray-200">
@@ -93,7 +93,7 @@ export default function InboxPage() {
             }`}
             onClick={() => setActiveTab('messages')}
           >
-            Messages
+            الرسائل
           </button>
           <button
             className={`flex-1 py-3 text-center font-medium ${
@@ -101,7 +101,7 @@ export default function InboxPage() {
             }`}
             onClick={() => setActiveTab('notifications')}
           >
-            Notifications
+            الإشعارات
           </button>
         </div>
       </div>

@@ -1,8 +1,16 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -12,15 +20,105 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Geist', 'Tajawal', Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* دعم اللغة العربية */
+html[dir="rtl"] {
+  text-align: right;
+}
+
+html[dir="rtl"] .icon-left {
+  margin-left: 0;
+  margin-right: 0.5rem;
+  transform: scaleX(-1);
+}
+
+html[dir="rtl"] .icon-right {
+  margin-right: 0;
+  margin-left: 0.5rem;
+  transform: scaleX(-1);
+}
+
+/* تحسينات إضافية للوضع المظلم */
+.dark .bg-white {
+  background-color: #1a1a1a;
+}
+
+.dark .text-gray-900 {
+  color: #f3f4f6;
+}
+
+.dark .text-gray-800 {
+  color: #e5e7eb;
+}
+
+.dark .text-gray-700 {
+  color: #d1d5db;
+}
+
+.dark .text-gray-600 {
+  color: #9ca3af;
+}
+
+.dark .text-gray-500 {
+  color: #6b7280;
+}
+
+.dark .border-gray-200 {
+  border-color: #374151;
+}
+
+/* تحسينات للتمرير */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #555;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+html[dir="rtl"] .rtl\:space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+html[dir="rtl"] .rtl\:mr-0 {
+  margin-right: 0px;
+}
+
+html[dir="rtl"] .rtl\:ml-3 {
+  margin-left: 0.75rem;
+}
+
+/* تحسين عرض الفيديو */
+.video-item {
+  scroll-snap-align: start;
+}
+
+/* تحسين الأنيميشن */
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
 }

@@ -1,0 +1,116 @@
+ ⨯ uncaughtException: Error: listen EADDRINUSE: address already in use 0.0.0.0:12000
+    at <unknown> (Error: listen EADDRINUSE: address already in use 0.0.0.0:12000) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 12000
+}
+ ⨯ uncaughtException:  Error: listen EADDRINUSE: address already in use 0.0.0.0:12000
+    at <unknown> (Error: listen EADDRINUSE: address already in use 0.0.0.0:12000) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  ○ Compiling / ...
+ ✓ Compiled / in 8.5s (1775 modules)
+ GET / 200 in 9989ms
+ GET / 200 in 688ms
+ GET / 200 in 90ms
+ ○ Compiling /feed ...
+ ✓ Compiled /feed in 1223ms (1832 modules)
+ GET /feed 200 in 1307ms
+ GET /feed 200 in 55ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /feed 200 in 220ms
+ ✓ Compiled /favicon.ico in 206ms (1046 modules)
+ GET /favicon.ico 200 in 316ms
+ ✓ Compiled /inbox in 400ms (1841 modules)
+ GET /inbox 200 in 470ms
+ GET /inbox 200 in 12ms
+ GET /inbox 200 in 12ms
+ GET /inbox 200 in 9ms
+ GET /inbox 200 in 9ms
+ GET /inbox 200 in 9ms
+ GET /inbox 200 in 9ms
+ GET /inbox 200 in 8ms
+ GET /inbox 200 in 9ms
+ GET /inbox 200 in 11ms
+ ✓ Compiled /_not-found in 310ms (1845 modules)
+ GET /logo.png 404 in 426ms
+ GET /logo.png 404 in 26ms
+ ✓ Compiled /inbox/[id] in 315ms (1858 modules)
+ GET /inbox/1 200 in 906ms
+ GET /inbox/1 200 in 28ms
+ GET /inbox/1 200 in 26ms
+ GET /inbox/1 200 in 26ms
+ GET /inbox/1 200 in 31ms
+ GET /inbox/1 200 in 27ms
+ GET /inbox/1 200 in 25ms
+ GET /inbox/1 200 in 25ms
+ GET /inbox/1 200 in 29ms
+ GET /inbox/1 200 in 12ms
+ GET /inbox 200 in 12ms
+ GET /logo.png 404 in 76ms
+ ○ Compiling /profile ...
+ ✓ Compiled /profile in 1892ms (2160 modules)
+ GET /profile 200 in 2035ms
+ GET /profile 200 in 10ms
+ ✓ Compiled / in 337ms (1207 modules)
+ GET / 200 in 477ms
+ ✓ Compiled in 1344ms (2179 modules)
+ GET /profile 200 in 335ms
+ GET /profile 200 in 10ms
+ GET /profile 200 in 10ms
+ GET /profile 200 in 15ms
+ ✓ Compiled in 263ms (972 modules)
+ GET /profile 200 in 14ms
+ ✓ Compiled in 225ms (972 modules)
+ GET /profile 200 in 14ms
+ ○ Compiling /auth ...
+ ✓ Compiled /auth in 918ms (2307 modules)
+ GET /auth 200 in 1053ms
+ GET /auth 200 in 9ms
+ GET /auth 200 in 9ms
+ GET /auth 200 in 11ms
+ GET /auth 200 in 10ms
+ GET /auth 200 in 8ms
+ ✓ Compiled in 259ms (1041 modules)
+ GET /auth 200 in 11ms
+ GET /feed 200 in 13ms
+ GET /feed 200 in 9ms
+ ✓ Compiled in 689ms (2324 modules)
+ GET / 200 in 66ms
+ GET /feed 200 in 16ms
+ ✓ Compiled in 556ms (2320 modules)
+ ✓ Compiled /_not-found in 334ms (2310 modules)
+ GET /feed 404 in 368ms
+ GET /feed 200 in 70ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, rename '/workspace/Bix/.next/cache/webpack/client-development/1.pack.gz_' -> '/workspace/Bix/.next/cache/webpack/client-development/1.pack.gz'
+ ✓ Compiled in 2s (2243 modules)
+ GET /feed 200 in 24ms
+ ✓ Compiled in 464ms (2250 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /feed 200 in 76ms
+ ✓ Compiled in 316ms (1043 modules)
+ ✓ Compiled in 246ms (1043 modules)
+ ✓ Compiled /favicon.ico in 170ms (1223 modules)
+ GET /favicon.ico 200 in 384ms
+ ✓ Compiled in 712ms (2252 modules)
+ GET /feed 200 in 67ms
+ GET /feed 200 in 13ms
+ ✓ Compiled in 352ms (2266 modules)
+ GET /feed 200 in 40ms
+ GET /favicon.ico 200 in 10ms
+ ✓ Compiled /_not-found in 285ms (2256 modules)
+ GET /icons/icon-192.png 404 in 385ms
+ ✓ Compiled in 228ms (1046 modules)
+ GET /feed 200 in 16ms
+ ✓ Compiled in 301ms (1046 modules)
+ GET /feed 200 in 16ms
+ ✓ Compiled in 301ms (1046 modules)
+ ✓ Compiled in 654ms (2270 modules)
+ ✓ Compiled in 477ms (2272 modules)
+ ✓ Compiled in 532ms (2256 modules)
+ ○ Compiling / ...
